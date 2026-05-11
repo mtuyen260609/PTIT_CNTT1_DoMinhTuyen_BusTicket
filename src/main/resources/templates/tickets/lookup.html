@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tra cứu vé</title>
+    <link rel="stylesheet" th:href="@{/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: topbar}"></div>
+<main class="container">
+    <section class="panel">
+        <h1>Tra cứu vé</h1>
+        <div class="message" th:if="${message}" th:text="${message}"></div>
+        <div class="error" th:if="${formError}" th:text="${formError}"></div>
+        <form class="form-grid two" th:action="@{/tickets/lookup}" th:object="${ticketLookupRequest}" method="post">
+            <label>
+                Mã vé
+                <input th:field="*{ticketCode}">
+                <span class="field-error" th:errors="*{ticketCode}"></span>
+            </label>
+            <label>
+                Số điện thoại
+                <input th:field="*{passengerPhone}">
+                <span class="field-error" th:errors="*{passengerPhone}"></span>
+            </label>
+            <div class="actions">
+                <button type="submit">Tra cứu</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="panel" th:if="${ticket != null}" style="margin-top: 20px;">
+        <h2>Chi tiết vé</h2>
+        <div class="grid">
+            <div>
+                <p><strong>Mã vé:</strong> <span th:text="${ticket.ticketCode}"></span></p>
+                <p><strong>Họ tên:</strong> <span th:text="${ticket.passengerName}"></span></p>
+                <p><strong>Số điện thoại:</strong> <span th:text="${ticket.passengerPhone}"></span></p>
+                <p>
+                    <strong>Trạng thái:</strong>
+                    <span th:if="${ticket.status.name() == 'PENDING'}">Chờ xử lý</span>
+                    <span th:if="${ticket.status.name() == 'PAID'}">Đã xác nhận</span>
+                    <span th:if="${ticket.status.name() == 'CANCELLED'}">Đã hủy</span>
+                </p>
+                <p><strong>Giá vé:</strong> <span th:text="${ticket.totalPrice.stripTrailingZeros().toPlainString()}"></span></p>
+            </div>
+            <div>
+                <p>
+                    <strong>Tuyến:</strong>
+                    <span th:text="${ticket.seat.trip.route.departure.name}"></span>
+                    &rarr;
+                    <span th:text="${ticket.seat.trip.route.arrival.name}"></span>
+                </p>
+                <p><strong>Giờ đi:</strong> <span th:text="${#temporals.format(ticket.seat.trip.departureTime, 'dd/MM/yyyy HH:mm')}"></span></p>
+                <p><strong>Ghế:</strong> <span th:text="${ticket.seat.seatNumber}"></span></p>
+                <p><strong>Biển số xe:</strong> <span th:text="${ticket.seat.trip.bus.licensePlate}"></span></p>
+                <p><strong>Loại xe:</strong> <span th:text="${ticket.seat.trip.bus.busType}"></span></p>
+                <p><strong>Tài xế:</strong> <span th:text="${ticket.seat.trip.bus.driverName}"></span></p>
+            </div>
+        </div>
+
+        <form th:if="${ticket.status.name() == 'PENDING'}"
+              class="actions"
+              th:action="@{/tickets/cancel}"
+              method="post"
+              style="margin-top: 16px;">
+            <input type="hidden" name="ticketCode" th:value="${ticket.ticketCode}">
+            <input type="hidden" name="passengerPhone" th:value="${ticket.passengerPhone}">
+            <button class="danger" type="submit"
+                    onclick="return confirm('Bạn có chắc chắn muốn hủy vé này?');">Hủy vé</button>
+            <span class="muted">Chỉ hủy được trước giờ khởi hành ít nhất 12 giờ.</span>
+        </form>
+    </section>
+</main>
+</body>
+</html>

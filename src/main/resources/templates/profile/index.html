@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ho so</title>
+    <link rel="stylesheet" th:href="@{/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: topbar}"></div>
+<main class="container">
+    <section class="panel">
+        <h1>Ho so ca nhan</h1>
+        <div class="message" th:if="${message}" th:text="${message}"></div>
+        <div class="error" th:if="${formError}" th:text="${formError}"></div>
+        <p><strong>Tai khoan:</strong> <span th:text="${profile.username}"></span></p>
+        <p><strong>Vai tro:</strong> <span th:text="${profile.role}"></span></p>
+        <p><strong>Ho ten:</strong> <span th:text="${profile.profile.fullName}"></span></p>
+        <p><strong>So dien thoai:</strong> <span th:text="${profile.profile.phone}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${profile.profile.email}"></span></p>
+        <p><strong>Dia chi:</strong> <span th:text="${profile.profile.address}"></span></p>
+        <div class="actions">
+            <a class="button" th:href="@{/profile/edit}">Sua ho so</a>
+        </div>
+    </section>
+
+    <section class="panel" style="margin-top: 20px;">
+        <h2>Ve cua toi</h2>
+        <p class="muted" th:if="${#lists.isEmpty(tickets)}">Ban chua co ve nao.</p>
+        <div class="table-wrap" th:if="${!#lists.isEmpty(tickets)}">
+            <table>
+                <thead>
+                <tr>
+                    <th>Ma ve</th>
+                    <th>Tuyen</th>
+                    <th>Gio di</th>
+                    <th>Ghe</th>
+                    <th>Trang thai</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="ticket : ${tickets}">
+                    <td th:text="${ticket.ticketCode}"></td>
+                    <td>
+                        <span th:text="${ticket.seat.trip.route.departure.name}"></span>
+                        &rarr;
+                        <span th:text="${ticket.seat.trip.route.arrival.name}"></span>
+                    </td>
+                    <td th:text="${#temporals.format(ticket.seat.trip.departureTime, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td th:text="${ticket.seat.seatNumber}"></td>
+                    <td>
+                        <span th:if="${ticket.status.name() == 'PENDING'}">Cho xu ly</span>
+                        <span th:if="${ticket.status.name() == 'PAID'}">Da xac nhan</span>
+                        <span th:if="${ticket.status.name() == 'CANCELLED'}">Da huy</span>
+                    </td>
+                    <td>
+                        <form th:if="${ticket.status.name() == 'PENDING'}"
+                              th:action="@{/profile/tickets/{id}/cancel(id=${ticket.id})}"
+                              method="post">
+                            <button class="danger" type="submit"
+                                    onclick="return confirm('Ban co chac chan muon huy ve nay?');">
+                                Huy ve
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+</body>
+</html>

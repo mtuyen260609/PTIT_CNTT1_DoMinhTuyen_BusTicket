@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="sidebar">
+    <header class="admin-topbar">
+        <a class="admin-brand" th:href="@{/admin}">Bus Ticket Pro</a>
+        <details class="admin-user-menu">
+            <summary>Admin</summary>
+            <div class="admin-user-panel">
+                <a th:href="@{/profile}">Hồ sơ</a>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit">Đăng xuất</button>
+                </form>
+            </div>
+        </details>
+    </header>
+
+    <aside class="admin-sidebar">
+        <nav class="admin-nav">
+            <a th:href="@{/admin}">Dashboard</a>
+            <a th:href="@{/admin/buses}">Quản lý xe</a>
+            <a th:href="@{/admin/trips}">Quản lý chuyến</a>
+            <a th:href="@{/admin/tickets/lookup}">Tra cứu vé</a>
+        </nav>
+    </aside>
+</th:block>
+</body>
+</html>

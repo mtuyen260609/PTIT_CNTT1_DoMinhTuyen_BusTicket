@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sửa hồ sơ</title>
+    <link rel="stylesheet" th:href="@{/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: topbar}"></div>
+<main class="container">
+    <section class="panel">
+        <h1>Sửa hồ sơ</h1>
+        <form class="form-grid" th:action="@{/profile/edit}" th:object="${profileUpdateRequest}" method="post">
+            <label>
+                Họ tên
+                <input th:field="*{fullName}">
+                <span class="field-error" th:errors="*{fullName}"></span>
+            </label>
+            <label>
+                Số điện thoại
+                <input th:field="*{phone}">
+                <span class="field-error" th:errors="*{phone}"></span>
+            </label>
+            <label>
+                Email
+                <input th:field="*{email}">
+                <span class="field-error" th:errors="*{email}"></span>
+            </label>
+            <label>
+                Địa chỉ
+                <textarea th:field="*{address}"></textarea>
+                <span class="field-error" th:errors="*{address}"></span>
+            </label>
+            <div class="actions">
+                <button type="submit">Lưu hồ sơ</button>
+                <a class="button secondary" th:href="@{/profile}">Hủy</a>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

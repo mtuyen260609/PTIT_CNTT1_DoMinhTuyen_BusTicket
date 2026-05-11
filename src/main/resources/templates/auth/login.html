@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng nhập</title>
+    <link rel="stylesheet" th:href="@{/app.css}">
+</head>
+<body class="auth-body">
+<main class="auth-page">
+    <section class="auth-card">
+        <div class="auth-heading">
+            <h1>Đăng nhập</h1>
+            <p>Truy cập hệ thống đặt vé xe khách liên tỉnh.</p>
+        </div>
+
+        <div class="message" th:if="${message}" th:text="${message}"></div>
+        <div class="error" th:if="${formError}" th:text="${formError}"></div>
+
+        <form class="form-grid" th:action="@{/login}" th:object="${loginRequest}" method="post" autocomplete="off">
+            <label>
+                Tên đăng nhập
+                <input th:field="*{username}" autocomplete="off" placeholder="Nhập tên đăng nhập">
+                <span class="field-error" th:errors="*{username}"></span>
+            </label>
+            <label>
+                Mật khẩu
+                <input type="password" th:field="*{password}" autocomplete="off" placeholder="Nhập mật khẩu">
+                <span class="field-error" th:errors="*{password}"></span>
+            </label>
+            <button class="auth-submit" type="submit">Đăng nhập</button>
+        </form>
+
+        <p class="auth-switch">
+            Chưa có tài khoản?
+            <a th:href="@{/register}">Đăng ký ngay</a>
+        </p>
+    </section>
+</main>
+</body>
+</html>

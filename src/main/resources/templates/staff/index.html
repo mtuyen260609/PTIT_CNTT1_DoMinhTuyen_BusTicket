@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nhân viên</title>
+    <link rel="stylesheet" th:href="@{/app.css}">
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+    <div th:replace="~{staff/fragments :: sidebar}"></div>
+    <main class="admin-main">
+        <section class="panel">
+            <div class="actions" style="justify-content: space-between; margin-bottom: 16px;">
+                <div>
+                    <h1 style="margin: 0;">Duyệt vé</h1>
+                    <p class="muted" style="margin-bottom: 0;">Xác nhận vé chờ xử lý và hủy vé giữ chỗ quá 15 phút.</p>
+                </div>
+                <form th:action="@{/staff/tickets/cancel-expired}" method="post">
+                    <button class="danger" type="submit"
+                            onclick="return confirm('Hủy tất cả vé PENDING đã giữ chỗ quá 15 phút?');">Hủy vé quá hạn</button>
+                </form>
+            </div>
+
+            <div class="message" th:if="${message}" th:text="${message}"></div>
+            <div class="error" th:if="${formError}" th:text="${formError}"></div>
+
+            <p class="muted" th:if="${#lists.isEmpty(pendingTickets)}">Không có vé đang chờ xử lý.</p>
+            <div class="table-wrap" th:if="${!#lists.isEmpty(pendingTickets)}">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Mã vé</th>
+                        <th>Khách</th>
+                        <th>SĐT</th>
+                        <th>Tuyến</th>
+                        <th>Ghế</th>
+                        <th>Giờ đi</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="ticket : ${pendingTickets}">
+                        <td th:text="${ticket.ticketCode}"></td>
+                        <td th:text="${ticket.passengerName}"></td>
+                        <td th:text="${ticket.passengerPhone}"></td>
+                        <td>
+                            <span th:text="${ticket.seat.trip.route.departure.name}"></span>
+                            &rarr;
+                            <span th:text="${ticket.seat.trip.route.arrival.name}"></span>
+                        </td>
+                        <td th:text="${ticket.seat.seatNumber}"></td>
+                        <td th:text="${#temporals.format(ticket.seat.trip.departureTime, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td th:text="${ticket.status}"></td>
+                        <td>
+                            <form th:action="@{/staff/tickets/{id}/confirm(id=${ticket.id})}" method="post">
+                                <button type="submit">Xác nhận</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="panel" style="margin-top: 20px;" th:if="${!#lists.isEmpty(expiredTickets)}">
+            <h2>Vé quá hạn</h2>
+            <p class="muted">Các vé PENDING đã giữ chỗ quá 15 phút, cần hủy để giải phóng ghế.</p>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Mã vé</th>
+                        <th>Khách</th>
+                        <th>Tuyến</th>
+                        <th>Giờ đi</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="ticket : ${expiredTickets}">
+                        <td th:text="${ticket.ticketCode}"></td>
+                        <td th:text="${ticket.passengerName}"></td>
+                        <td>
+                            <span th:text="${ticket.seat.trip.route.departure.name}"></span>
+                            &rarr;
+                            <span th:text="${ticket.seat.trip.route.arrival.name}"></span>
+                        </td>
+                        <td th:text="${#temporals.format(ticket.seat.trip.departureTime, 'dd/MM/yyyy HH:mm')}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

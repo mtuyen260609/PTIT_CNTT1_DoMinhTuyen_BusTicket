@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quản lý xe</title>
+    <link rel="stylesheet" th:href="@{/app.css}">
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+    <div th:replace="~{admin/fragments :: sidebar}"></div>
+    <main class="admin-main">
+        <section class="panel">
+            <div class="actions" style="justify-content: space-between; margin-bottom: 16px;">
+                <h1 style="margin: 0;">Danh mục xe</h1>
+                <a class="button" th:href="@{/admin/buses/new}">Thêm xe</a>
+            </div>
+
+            <div class="message" th:if="${message}" th:text="${message}"></div>
+            <div class="error" th:if="${formError}" th:text="${formError}"></div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Biển số</th>
+                        <th>Loại xe</th>
+                        <th>Số ghế</th>
+                        <th>Hãng xe</th>
+                        <th>Tài xế</th>
+                        <th>Thao tác</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${#lists.isEmpty(buses)}">
+                        <td colspan="6" class="muted">Chưa có xe.</td>
+                    </tr>
+                    <tr th:each="bus : ${buses}">
+                        <td th:text="${bus.licensePlate}"></td>
+                        <td th:text="${bus.busType}"></td>
+                        <td th:text="${bus.totalSeats}"></td>
+                        <td th:text="${bus.company}"></td>
+                        <td th:text="${bus.driverName}"></td>
+                        <td>
+                            <div class="actions">
+                                <a class="button secondary" th:href="@{/admin/buses/{id}/edit(id=${bus.id})}">Sửa</a>
+                                <form th:action="@{/admin/buses/{id}/delete(id=${bus.id})}" method="post">
+                                    <button class="danger" type="submit"
+                                            onclick="return confirm('Bạn có chắc chắn muốn xóa xe này?');">Xóa</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

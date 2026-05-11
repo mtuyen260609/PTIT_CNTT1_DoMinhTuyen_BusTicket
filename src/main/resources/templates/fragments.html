@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<header class="topbar" th:fragment="topbar">
+    <div class="topbar-inner">
+        <a class="brand" th:href="@{/}">Bus Ticket Pro</a>
+        <nav class="nav">
+            <a th:href="@{/}">Trang chủ</a>
+            <a th:href="@{/booking}">Đặt vé</a>
+            <a th:href="@{/tickets/lookup}">Tra cứu vé</a>
+            <a th:if="${session.role == 'ADMIN'}" th:href="@{/admin}">Admin</a>
+            <a th:if="${session.role == 'STAFF' or session.role == 'ADMIN'}" th:href="@{/staff}">Nhân viên</a>
+            <a th:if="${session.userId == null}" th:href="@{/login}">Đăng nhập</a>
+            <a th:if="${session.userId == null}" th:href="@{/register}">Đăng ký</a>
+            <details class="account-menu" th:if="${session.userId != null}">
+                <summary th:text="${session.fullName}">Người dùng</summary>
+                <div class="account-menu-panel">
+                    <a th:href="@{/profile}">Hồ sơ</a>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit">Đăng xuất</button>
+                    </form>
+                </div>
+            </details>
+        </nav>
+    </div>
+</header>
+</body>
+</html>

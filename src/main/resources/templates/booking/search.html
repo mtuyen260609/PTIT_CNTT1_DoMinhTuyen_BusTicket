@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đặt vé</title>
+    <link rel="stylesheet" th:href="@{/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: topbar}"></div>
+<main class="container">
+    <section class="panel">
+        <h1>Tìm chuyến xe</h1>
+        <form class="form-grid two" th:action="@{/booking/search}" th:object="${tripSearchRequest}" method="post">
+            <label>
+                Điểm đi
+                <select th:field="*{departureId}">
+                    <option value="">Chọn điểm đi</option>
+                    <option th:each="location : ${locations}" th:value="${location.id}" th:text="${location.name}"></option>
+                </select>
+                <span class="field-error" th:errors="*{departureId}"></span>
+            </label>
+            <label>
+                Điểm đến
+                <select th:field="*{arrivalId}">
+                    <option value="">Chọn điểm đến</option>
+                    <option th:each="location : ${locations}" th:value="${location.id}" th:text="${location.name}"></option>
+                </select>
+                <span class="field-error" th:errors="*{arrivalId}"></span>
+            </label>
+            <label>
+                Ngày đi
+                <input type="date" th:field="*{departureDate}">
+                <span class="field-error" th:errors="*{departureDate}"></span>
+            </label>
+            <div class="actions">
+                <button type="submit">Tìm chuyến</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="panel" th:if="${trips != null}" style="margin-top: 20px;">
+        <h2>Kết quả</h2>
+        <p class="muted" th:if="${#lists.isEmpty(trips)}">Không có chuyến phù hợp.</p>
+        <div class="table-wrap" th:if="${!#lists.isEmpty(trips)}">
+            <table>
+                <thead>
+                <tr>
+                    <th>Tuyến</th>
+                    <th>Giờ đi</th>
+                    <th>Xe</th>
+                    <th>Giá</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="trip : ${trips}">
+                    <td>
+                        <span th:text="${trip.route.departure.name}"></span>
+                        &rarr;
+                        <span th:text="${trip.route.arrival.name}"></span>
+                    </td>
+                    <td th:text="${#temporals.format(trip.departureTime, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td>
+                        <span th:text="${trip.bus.licensePlate}"></span>
+                        <span class="muted" th:text="${trip.bus.busType}"></span>
+                    </td>
+                    <td th:text="${trip.price.stripTrailingZeros().toPlainString()}"></td>
+                    <td><a class="button" th:href="@{/booking/trips/{id}(id=${trip.id})}">Chọn ghế</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/app.css}">
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+    <div th:replace="~{admin/fragments :: sidebar}"></div>
+    <main class="admin-main">
+        <section class="admin-page-title">
+            <h1>Dashboard</h1>
+            <p class="muted">Tổng quan hệ thống quản lý vé xe.</p>
+        </section>
+
+        <section class="admin-stat-grid">
+            <div class="admin-stat-card">
+                <span>Xe</span>
+                <strong th:text="${busCount}">0</strong>
+            </div>
+            <div class="admin-stat-card">
+                <span>Chuyến xe</span>
+                <strong th:text="${tripCount}">0</strong>
+            </div>
+            <div class="admin-stat-card">
+                <span>Vé đã tạo</span>
+                <strong th:text="${ticketCount}">0</strong>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

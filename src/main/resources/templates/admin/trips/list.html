@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quản lý chuyến xe</title>
+    <link rel="stylesheet" th:href="@{/app.css}">
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+    <div th:replace="~{admin/fragments :: sidebar}"></div>
+    <main class="admin-main">
+        <section class="panel">
+            <div class="actions" style="justify-content: space-between; margin-bottom: 16px;">
+                <h1 style="margin: 0;">Danh sách chuyến xe</h1>
+            </div>
+
+            <div class="message" th:if="${message}" th:text="${message}"></div>
+            <div class="error" th:if="${formError}" th:text="${formError}"></div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Tuyến</th>
+                        <th>Xe</th>
+                        <th>Tài xế</th>
+                        <th>Giờ khởi hành</th>
+                        <th>Giá vé</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${#lists.isEmpty(trips)}">
+                        <td colspan="5" class="muted">Chưa có chuyến xe.</td>
+                    </tr>
+                    <tr th:each="trip : ${trips}">
+                        <td>
+                            <span th:text="${trip.route.departure.name}"></span>
+                            &rarr;
+                            <span th:text="${trip.route.arrival.name}"></span>
+                        </td>
+                        <td>
+                            <span th:text="${trip.bus.licensePlate}"></span>
+                            <span class="muted" th:text="${trip.bus.busType}"></span>
+                        </td>
+                        <td th:text="${trip.bus.driverName}"></td>
+                        <td th:text="${#temporals.format(trip.departureTime, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td th:text="${trip.price.stripTrailingZeros().toPlainString()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

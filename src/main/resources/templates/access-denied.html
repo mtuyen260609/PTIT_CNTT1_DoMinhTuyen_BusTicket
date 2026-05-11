@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Không có quyền</title>
+    <link rel="stylesheet" th:href="@{/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: topbar}"></div>
+<main class="container">
+    <section class="panel">
+        <h1>Không có quyền truy cập</h1>
+        <p class="muted">Tài khoản hiện tại không được phép mở khu vực này.</p>
+        <a class="button" th:href="@{/}">Về trang chủ</a>
+    </section>
+</main>
+</body>
+</html>

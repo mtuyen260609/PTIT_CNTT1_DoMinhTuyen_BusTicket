@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chọn ghế</title>
+    <link rel="stylesheet" th:href="@{/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: topbar}"></div>
+<main class="container">
+    <div class="grid">
+        <section class="panel">
+            <h1>Chọn ghế</h1>
+            <p>
+                <strong>Tuyến:</strong>
+                <span th:text="${trip.route.departure.name}"></span>
+                &rarr;
+                <span th:text="${trip.route.arrival.name}"></span>
+            </p>
+            <p><strong>Giờ đi:</strong> <span th:text="${#temporals.format(trip.departureTime, 'dd/MM/yyyy HH:mm')}"></span></p>
+            <p>
+                <strong>Xe:</strong>
+                <span th:text="${trip.bus.licensePlate}"></span>
+                -
+                <span th:text="${trip.bus.busType}"></span>
+            </p>
+            <div class="seat-legend">
+                <span><i class="seat-sample available"></i>Trống</span>
+                <span><i class="seat-sample pending"></i>Đang giữ</span>
+                <span><i class="seat-sample booked"></i>Đã đặt</span>
+            </div>
+            <div class="seat-map">
+                <label th:each="seat : ${seats}"
+                       class="seat-tile"
+                       th:classappend="${seat.status.name().toLowerCase()}"
+                       th:style="'grid-row: ' + ${seat.seatRow} + '; grid-column: ' + ${seat.seatColumn}">
+                    <input type="radio" name="seatPicker" th:value="${seat.id}" th:disabled="${!seat.available}">
+                    <span th:text="${seat.seatNumber}"></span>
+                </label>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Thông tin đặt vé</h2>
+            <div class="error" th:if="${formError}" th:text="${formError}"></div>
+            <form class="form-grid" th:action="@{/booking/trips/{id}(id=${trip.id})}" th:object="${bookingRequest}" method="post">
+                <input type="hidden" th:field="*{seatId}" id="selectedSeatId">
+                <span class="field-error" th:errors="*{seatId}"></span>
+                <p class="muted">Ghế đã đặt hoặc đang giữ sẽ bị khóa, không thể chọn.</p>
+                <label>
+                    Họ tên
+                    <input th:field="*{passengerName}">
+                    <span class="field-error" th:errors="*{passengerName}"></span>
+                </label>
+                <label>
+                    Số điện thoại
+                    <input th:field="*{passengerPhone}">
+                    <span class="field-error" th:errors="*{passengerPhone}"></span>
+                </label>
+                <label>
+                    Email
+                    <input th:field="*{passengerEmail}">
+                    <span class="field-error" th:errors="*{passengerEmail}"></span>
+                </label>
+                <div class="actions">
+                    <button type="submit">Đặt vé</button>
+                    <a class="button secondary" th:href="@{/booking}">Quay lại</a>
+                </div>
+            </form>
+        </section>
+    </div>
+</main>
+<script>
+    document.querySelectorAll('input[name="seatPicker"]').forEach(function (seatInput) {
+        seatInput.addEventListener('change', function () {
+            document.getElementById('selectedSeatId').value = seatInput.value;
+        });
+    });
+</script>
+</body>
+</html>

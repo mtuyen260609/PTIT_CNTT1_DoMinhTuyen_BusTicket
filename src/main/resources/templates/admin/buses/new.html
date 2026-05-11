@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thêm xe</title>
+    <link rel="stylesheet" th:href="@{/app.css}">
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+    <div th:replace="~{admin/fragments :: sidebar}"></div>
+    <main class="admin-main">
+        <section class="panel" style="max-width: 640px;">
+            <h1>Thêm xe</h1>
+            <div class="error" th:if="${formError}" th:text="${formError}"></div>
+
+            <form class="form-grid" th:action="@{/admin/buses}" th:object="${busRequest}" method="post">
+                <label>
+                    Biển số xe
+                    <input th:field="*{licensePlate}">
+                    <span class="field-error" th:errors="*{licensePlate}"></span>
+                </label>
+                <label>
+                    Loại xe
+                    <select th:field="*{busType}">
+                        <option value="">Chọn loại xe</option>
+                        <option th:each="type : ${busTypes}" th:value="${type.name()}"
+                                th:text="${type.label + ' - ' + type.totalSeats + ' ghế'}"></option>
+                    </select>
+                    <span class="field-error" th:errors="*{busType}"></span>
+                </label>
+                <label>
+                    Hãng xe
+                    <input th:field="*{company}">
+                    <span class="field-error" th:errors="*{company}"></span>
+                </label>
+                <label>
+                    Tài xế
+                    <input th:field="*{driverName}">
+                    <span class="field-error" th:errors="*{driverName}"></span>
+                </label>
+                <div class="actions">
+                    <button type="submit">Lưu</button>
+                    <a th:href="@{/admin/buses}">Quay lại</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng ký</title>
+    <link rel="stylesheet" th:href="@{/app.css}">
+</head>
+<body class="auth-body">
+<main class="auth-page">
+    <section class="auth-card auth-card-wide">
+        <div class="auth-heading">
+            <h1>Đăng ký hành khách</h1>
+            <p>Tạo tài khoản để đặt vé và quản lý thông tin cá nhân.</p>
+        </div>
+
+        <div class="error" th:if="${formError}" th:text="${formError}"></div>
+
+        <form class="form-grid two" th:action="@{/register}" th:object="${registerRequest}" method="post" autocomplete="off">
+            <label>
+                Tên đăng nhập
+                <input th:field="*{username}" autocomplete="off" placeholder="Nhập tên đăng nhập">
+                <span class="field-error" th:errors="*{username}"></span>
+            </label>
+            <label>
+                Họ tên
+                <input th:field="*{fullName}" autocomplete="name" placeholder="Nhập họ tên">
+                <span class="field-error" th:errors="*{fullName}"></span>
+            </label>
+            <label>
+                Mật khẩu
+                <input type="password" th:field="*{password}" autocomplete="new-password" placeholder="Nhập mật khẩu">
+                <span class="field-error" th:errors="*{password}"></span>
+            </label>
+            <label>
+                Xác nhận mật khẩu
+                <input type="password" th:field="*{confirmPassword}" autocomplete="new-password" placeholder="Nhập lại mật khẩu">
+                <span class="field-error" th:errors="*{confirmPassword}"></span>
+            </label>
+            <label>
+                Số điện thoại
+                <input th:field="*{phone}" autocomplete="tel" placeholder="Nhập số điện thoại">
+                <span class="field-error" th:errors="*{phone}"></span>
+            </label>
+            <label>
+                Email
+                <input th:field="*{email}" autocomplete="email" placeholder="Nhập email">
+                <span class="field-error" th:errors="*{email}"></span>
+            </label>
+            <label class="form-span">
+                Địa chỉ
+                <textarea th:field="*{address}" placeholder="Nhập địa chỉ"></textarea>
+                <span class="field-error" th:errors="*{address}"></span>
+            </label>
+            <div class="auth-actions form-span">
+                <button class="auth-submit" type="submit">Đăng ký</button>
+            </div>
+        </form>
+
+        <p class="auth-switch">
+            Đã có tài khoản?
+            <a th:href="@{/login}">Đăng nhập</a>
+        </p>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bus Ticket Pro</title>
+    <link rel="stylesheet" th:href="@{/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: topbar}"></div>
+<main class="container">
+    <section class="welcome-panel">
+        <p class="muted">Bus Ticket Pro</p>
+        <h1>
+            Chào mừng
+            <span th:if="${session.userId != null}" th:text="${session.fullName}">người dùng</span>
+            <span th:if="${session.userId == null}">quý khách</span>
+            đến với bến xe khách liên tỉnh
+        </h1>
+    </section>
+
+    <section class="feature-grid">
+        <a class="feature-card" th:href="@{/booking}">
+            <strong>Đặt vé</strong>
+            <span>Tìm chuyến, chọn ghế và giữ chỗ.</span>
+        </a>
+        <a class="feature-card" th:href="@{/tickets/lookup}">
+            <strong>Tra cứu vé</strong>
+            <span>Xem thông tin vé bằng mã vé và số điện thoại.</span>
+        </a>
+        <a class="feature-card" th:if="${session.userId == null}" th:href="@{/login}">
+            <strong>Đăng nhập</strong>
+            <span>Vào tài khoản để quản lý thông tin cá nhân.</span>
+        </a>
+        <a class="feature-card" th:if="${session.userId == null}" th:href="@{/register}">
+            <strong>Đăng ký</strong>
+            <span>Tạo tài khoản hành khách mới.</span>
+        </a>
+        <a class="feature-card" th:if="${session.userId != null}" th:href="@{/profile}">
+            <strong>Hồ sơ</strong>
+            <span>Xem và cập nhật thông tin cá nhân.</span>
+        </a>
+        <a class="feature-card" th:if="${session.role == 'ADMIN'}" th:href="@{/admin/buses}">
+            <strong>Quản lý xe</strong>
+            <span>Thêm, sửa, xóa thông tin xe.</span>
+        </a>
+        <a class="feature-card" th:if="${session.role == 'ADMIN'}" th:href="@{/admin/trips}">
+            <strong>Quản lý chuyến</strong>
+            <span>Tạo chuyến xe theo điểm đi, điểm đến, giờ chạy và giá vé.</span>
+        </a>
+        <a class="feature-card" th:if="${session.role == 'STAFF' or session.role == 'ADMIN'}" th:href="@{/staff}">
+            <strong>Nhân viên</strong>
+            <span>Truy cập khu vực làm việc của nhân viên.</span>
+        </a>
+    </section>
+</main>
+</body>
+</html>
