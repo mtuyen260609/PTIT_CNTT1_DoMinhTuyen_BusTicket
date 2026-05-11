@@ -27,7 +27,8 @@ public class AuthController {
     @GetMapping("/register")
     public String registerForm(Model model, HttpSession session) {
         if (session.getAttribute("userId") != null) {
-            return "redirect:/";
+            session.invalidate();
+            return "redirect:/register";
         }
 
         model.addAttribute("registerRequest", new RegisterRequest());
